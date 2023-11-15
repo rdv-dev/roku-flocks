@@ -8,8 +8,10 @@
             "name": "BrightScript Debug: Launch",
             "type": "brightscript",
             "request": "launch",
-            "host": "192.168.0.110",
-            "password": "asdfg123",
+            // "host": "192.168.0.110",
+            "host": "192.168.0.106",
+            // "password": "asdfg123",
+            "password": "asdf",
             "rootDir": "/home/rob/Documents/roku/roku-flocks"
         }
     ]
