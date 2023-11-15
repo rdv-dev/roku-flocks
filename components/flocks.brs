@@ -1,9 +1,14 @@
 function init()
     m.top.backgroundURI = "pkg:/images/rsgde_bg_hd.jpg"
 
+    m.animTimer = m.top.findNode("testTimer")
+
     m.numBoids = 10
     m.boidSize = 24
     m.edgeThreshold = m.boidSize * 3
+
+    m.wander = 200
+    m.wanderhalf = m.wander / 2
     
     generateBoids()
 
@@ -14,11 +19,40 @@ function init()
         boidNum = StrI(i)
         boidNum = Right(boidNum, boidNum.Len()-1)
         boidAnim = m.top.FindNode("boidPA"+boidNum)
-        boidAnim.repeat = true
+        boidAnim.repeat = false
         boidAnim.control = "start"
     end for
 
+    m.animTimer.control = "start"
+    m.animTimer.ObserveField("fire", "updateAnim")
+
     end function
+
+function updateAnim()
+
+    For i=1 to m.numBoids
+        boidNum = StrI(i)
+        boidNum = Right(boidNum, boidNum.Len()-1)
+        boidPA = m.top.FindNode("boidPA"+boidNum)
+        boidAnim = boidPA.getChild(0)
+        boidVector = boidAnim.getChild(0)
+
+        centerx = boidVector.keyValue[1][0]
+        centery = boidVector.keyValue[1][1]
+
+        newPosx = centerx + Rnd(m.wander) - m.wanderhalf
+        newPosy = centery + Rnd(m.wander) - m.wanderhalf
+
+        boidVector.keyValue = [
+            boidVector.keyValue[1],
+            [newPosx,newPosy]
+        ]
+    
+        boidPA.repeat = false
+        boidPA.control = "start"
+    end for
+
+end function
 
 function generateBoids() 
 
@@ -42,13 +76,13 @@ function generateBoids()
         boid.translation = [ centerx, centery ]
 
         ' choose a new position to go to
-        newPosx = centerx + Rnd(50) - 25
-        newPosy = centery + Rnd(50) - 25
+        newPosx = centerx + Rnd(m.wander) - m.wanderhalf
+        newPosy = centery + Rnd(m.wander) - m.wanderhalf
 
         boidPA = m.top.createChild("ParallelAnimation")
         boidPA.SetFields({"id":"boidPA"+boidNum})
 
-        duration = 3
+        duration = 1
         
         anim = boidPA.createChild("Animation")
         anim.addFields({"boidNumber":boidNum})
