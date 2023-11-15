@@ -7,6 +7,11 @@
   <script type = "text/brightscript" uri="flocks.brs"/>
 
   <children>
+    <Timer
+    id="testTimer"
+    repeat="true"
+    duration="1"
+    />
   </children>
 
 </component>
